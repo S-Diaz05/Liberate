@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">LiberateApp</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="password">Contraseña</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="bienvenida">Bienvenido</string>
+    <string name="inicio">Inicio de sesión</string>
+    <string name="ingresar_correo">Ingrese el correo</string>
+    <string name="ingresar_password">Ingrese la contraseña</string>
+    <string name="confirmar_password">Verifique la contraseña</string>
+    <string name="ingresar_nombre">Ingrese el nombre</string>
+    <string name="ingresar_apellido">Ingresar el apellido</string>
+    <string name="ir_inicio_sesion">Iniciar sesión</string>
+    <string name="registro">Registrarse</string>
+    <string name="registro_usuario">Registro usuario</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="mantener_sesion">Mantener sesión registrada</string>
+</resources>
