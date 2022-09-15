@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/drawable-v24/edittext_backg.xml" value="0.1" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_iniciar_sesrion.xml" value="0.1" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_inicio_sesion.xml" value="0.1" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_inicio_sesion2.xml" value="0.1" />
         <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_registrar_usuario.xml" value="0.1" />
+        <entry key="..\:/Users/santi/OneDrive/Universidad/Octavo semestre/PSU/Liberate/app/src/main/res/layout/activity_registro_usuario.xml" value="0.1" />
       </map>
     </option>
   </component>

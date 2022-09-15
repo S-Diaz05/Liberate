@@ -15,5 +15,5 @@
     <string name="registro_usuario">Registro usuario</string>
     <string name="nombre">Nombre</string>
     <string name="apellido">Apellido</string>
-    <string name="mantener_sesion">Mantener sesión registrada</string>
+    <string name="mantener_sesion">Mantener sesión iniciada</string>
 </resources>

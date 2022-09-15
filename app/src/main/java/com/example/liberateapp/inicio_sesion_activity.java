@@ -1,16 +1,31 @@
 package com.example.liberateapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.liberateapp.modelo.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class Inicio_sesion_activity extends AppCompatActivity {
+public class inicio_sesion_activity extends AppCompatActivity {
+
     Button logIn;
     EditText editPassword;
     EditText editCorreo ;
@@ -24,12 +39,22 @@ public class Inicio_sesion_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
 
-       // logIn.setOnClickListener(this);
+        // logIn.setOnClickListener(this);
         editCorreo = (EditText) findViewById(R.id.editText_correo);
         editPassword = (EditText) findViewById(R.id.editText_password);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
+
+        mAuth = FirebaseAuth.getInstance();
+        logIn = (Button) findViewById(R.id.login_btn);
+
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userLogin();
+            }
+        });
     }
-/*
+
     public void userLogin(){
         String email = editCorreo.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
@@ -77,26 +102,19 @@ public class Inicio_sesion_activity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(Inicio_sesion_activity.this, "Error en el inicio ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(inicio_sesion_activity.this, "Error en el inicio ", Toast.LENGTH_LONG).show();
                         }
                     });
 
 
                 }
                 else{
-                    Toast.makeText(Inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
+                    Toast.makeText(inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
 
                 }
             }
         });
-        startActivity(new Intent(this, Home_activity.class));
+        startActivity(new Intent(this, home_activity.class));
     }
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.login:
-                userLogin();
-                break;
-        }
-    }*/
+
 }

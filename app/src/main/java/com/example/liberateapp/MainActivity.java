@@ -20,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
         inicioSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Inicio_sesion_activity.class));
+                startActivity(new Intent(com.example.liberateapp.MainActivity.this, inicio_sesion_activity.class));
             }
         });
         registro = (Button) findViewById(R.id.buttonIrRegristrar);
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Registrar_usuario_activity.class));
+                startActivity(new Intent(MainActivity.this, registrar_usuario_activity.class));
             }
         });
     }

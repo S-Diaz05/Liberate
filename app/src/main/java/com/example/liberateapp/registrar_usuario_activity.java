@@ -1,5 +1,8 @@
 package com.example.liberateapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -7,9 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Registrar_usuario_activity extends AppCompatActivity{
+public class registrar_usuario_activity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText editNombre, editPassword, editCorreo, editConfirmarPassword;
@@ -28,6 +28,7 @@ public class Registrar_usuario_activity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_registrar_usuario);
         editNombre = (EditText) findViewById(R.id.editText_nombreRegistro);
         editCorreo = (EditText) findViewById(R.id.editText_correoRegistro);
@@ -39,10 +40,10 @@ public class Registrar_usuario_activity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(registro()){
-                    Toast.makeText(Registrar_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Registrar_usuario_activity.this, MainActivity.class));
+                    Toast.makeText(registrar_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(registrar_usuario_activity.this, MainActivity.class));
                 }else{
-                    Toast.makeText(Registrar_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(registrar_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -58,16 +59,14 @@ public class Registrar_usuario_activity extends AppCompatActivity{
             return false;
         }
 
-        Toast.makeText(Registrar_usuario_activity.this, email + password, Toast.LENGTH_SHORT).show();
-
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(Registrar_usuario_activity.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(registrar_usuario_activity.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
                     finish();
                 }else{
-                    Toast.makeText(Registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
+                    Toast.makeText(registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
                 }
 
 
