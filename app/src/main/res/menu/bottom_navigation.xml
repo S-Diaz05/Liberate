@@ -4,5 +4,9 @@
         android:id = "@+id/fragmentPerfil"
         android:icon="@drawable/ic_perfil"
         android:title="@string/title_perfil"></item>
+    <item
+        android:id = "@+id/fragmentHome"
+        android:icon="@drawable/ic_home"
+        android:title="@string/title_home"></item>
 
 </menu>

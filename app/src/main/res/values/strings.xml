@@ -17,6 +17,9 @@
     <string name="apellido">Apellido</string>
     <string name="mantener_sesion">Mantener sesión iniciada</string>
     <string name="title_perfil">Perfil</string>
+    <string name="title_home">Inicio</string>
+    <string name="log_out">Cerrar sesión</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
