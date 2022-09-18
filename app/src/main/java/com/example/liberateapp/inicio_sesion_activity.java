@@ -33,19 +33,21 @@ public class inicio_sesion_activity extends AppCompatActivity {
     private DatabaseReference reference;
     private String idUsuario;
     CheckBox checkBox;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
 
-        // logIn.setOnClickListener(this);
+
         editCorreo = (EditText) findViewById(R.id.editText_correo);
         editPassword = (EditText) findViewById(R.id.editText_password);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
 
         mAuth = FirebaseAuth.getInstance();
         logIn = (Button) findViewById(R.id.login_btn);
+
 
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +56,19 @@ public class inicio_sesion_activity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+          /*  Intent i = new Intent(inicio_sesion_activity.this, MainActivity2.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);*/
+        }else{
 
+        }
+    }
     public void userLogin(){
         String email = editCorreo.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
@@ -65,7 +79,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            editCorreo.setError("Porfavor ingrese un correo valido");
+            editCorreo.setError("Ingrese un correo válido");
             editCorreo.requestFocus();
             return;
         }
@@ -75,7 +89,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
             return;
         }
         if(password.length()<6){
-            editPassword.setError("La contraseña es de minimo 6 caracteres");
+            editPassword.setError("La contraseña es de mínimo 6 caracteres");
             editPassword.requestFocus();
         }
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -106,7 +120,6 @@ public class inicio_sesion_activity extends AppCompatActivity {
                         }
                     });
 
-
                 }
                 else{
                     Toast.makeText(inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
@@ -114,7 +127,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
                 }
             }
         });
-        startActivity(new Intent(this, home_activity.class));
+        startActivity(new Intent(this, barra_navegacion.class));
     }
 
 }

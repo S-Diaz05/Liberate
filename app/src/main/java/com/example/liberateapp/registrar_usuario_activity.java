@@ -11,11 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.liberateapp.modelo.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,15 +31,26 @@ public class registrar_usuario_activity extends AppCompatActivity {
     private EditText editNombre, editPassword, editCorreo, editConfirmarPassword;
     Button registrar;
 
+    DatabaseReference mDatabase;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
         setContentView(R.layout.activity_registrar_usuario);
         editNombre = (EditText) findViewById(R.id.editText_nombreRegistro);
         editCorreo = (EditText) findViewById(R.id.editText_correoRegistro);
         editPassword = (EditText) findViewById(R.id.editText_passwordRegistro);
         editConfirmarPassword = (EditText) findViewById(R.id.editText_passwordRegistro2);
+
+
 
         registrar = (Button) findViewById(R.id.buttonRegistro);
         registrar.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +66,16 @@ public class registrar_usuario_activity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            currentUser.reload();
+        }
+    }
+
     public boolean registro(){
         String email = editCorreo.getText().toString().trim();
         String nombre = editNombre.getText().toString().trim();
@@ -63,7 +90,15 @@ public class registrar_usuario_activity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(registrar_usuario_activity.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
+                    Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre);
+                    try{
+                        databaseReference.child("Users").child(u.getUuid()).setValue(u);
+                        Toast.makeText(registrar_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                    catch (Exception e){
+                        Toast.makeText(registrar_usuario_activity.this, "Error: "+e.toString(), Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }else{
                     Toast.makeText(registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
@@ -82,7 +117,7 @@ public class registrar_usuario_activity extends AppCompatActivity {
             return false;
         }
         if(email.isEmpty()){
-            editCorreo.setError("Se requiere nombre completo");
+            editCorreo.setError("Se requiere un correo electrónico");
             editCorreo.requestFocus();
             return false;
         }

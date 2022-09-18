@@ -1,5 +1,46 @@
 package com.example.liberateapp.modelo;
 
 public class Usuario {
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Usuario(String uuid, String email, String nombre) {
+        this.uuid = uuid;
+        this.email = email;
+        this.nombre = nombre;
+        this.admin = false;
+    }
+    public Usuario(String uuid, String email, String nombre, boolean admin) {
+        this.uuid = uuid;
+        this.email = email;
+        this.nombre = nombre;
+        this.admin = admin;
+    }
+
+    private String uuid;
+    private String email;
+    private String nombre;
+    private boolean admin;
 
 }
