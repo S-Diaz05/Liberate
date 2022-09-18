@@ -32,7 +32,6 @@ public class inicio_sesion_activity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
     private String idUsuario;
-    CheckBox checkBox;
     FirebaseUser currentUser;
 
     @Override
@@ -43,7 +42,6 @@ public class inicio_sesion_activity extends AppCompatActivity {
 
         editCorreo = (EditText) findViewById(R.id.editText_correo);
         editPassword = (EditText) findViewById(R.id.editText_password);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
         mAuth = FirebaseAuth.getInstance();
         logIn = (Button) findViewById(R.id.login_btn);

@@ -65,8 +65,6 @@ public class FragmentPerfil extends Fragment {
         }
         auth = FirebaseAuth.getInstance();
 
-
-
     }
 
     @Override

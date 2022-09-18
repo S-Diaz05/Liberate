@@ -110,13 +110,5 @@
         app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/logoweb" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/mantener_sesion"
-        app:layout_constraintTop_toBottomOf="@+id/editText_password"
-        tools:layout_editor_absoluteX="33dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
