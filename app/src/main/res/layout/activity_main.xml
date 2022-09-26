@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageView
+        android:contentDescription="@string/logo"
         android:id="@+id/imageView"
         android:layout_width="360dp"
         android:layout_height="124dp"

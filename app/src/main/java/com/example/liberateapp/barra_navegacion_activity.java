@@ -12,7 +12,7 @@ import com.example.liberateapp.fragments.FragmentHome;
 import com.example.liberateapp.fragments.FragmentPerfil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class barra_navegacion extends AppCompatActivity {
+public class barra_navegacion_activity extends AppCompatActivity {
 
     FragmentPerfil fragmentPerfil = new FragmentPerfil();
     FragmentHome fragmentHome = new FragmentHome();
@@ -22,7 +22,7 @@ public class barra_navegacion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barra_navegacion);
-
+        loadFragment(fragmentHome);
         BottomNavigationView navegacion = findViewById(R.id.bottom_navigation);
         navegacion.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 

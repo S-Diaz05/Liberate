@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:autofillHints="name"
         android:id="@+id/editText_passwordRegistro"
         android:layout_width="345dp"
         android:layout_height="46dp"
@@ -38,6 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
+        android:autofillHints="name"
         android:id="@+id/editText_passwordRegistro2"
         android:layout_width="345dp"
         android:layout_height="46dp"
@@ -98,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_correoRegistro" />
 
     <EditText
-
+        android:autofillHints="name"
         android:id="@+id/editText_nombreRegistro"
         android:layout_width="345dp"
         android:layout_height="45dp"
@@ -115,7 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-
+        android:autofillHints="emailAddress"
         android:id="@+id/editText_correoRegistro"
         android:layout_width="345dp"
         android:layout_height="45dp"
@@ -158,6 +160,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_nombreRegistro" />
 
     <ImageView
+        android:contentDescription="@string/logo"
         android:id="@+id/imageView"
         android:layout_width="139dp"
         android:layout_height="71dp"

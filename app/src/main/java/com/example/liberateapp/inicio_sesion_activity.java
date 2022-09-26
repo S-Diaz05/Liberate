@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -125,7 +124,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
                 }
             }
         });
-        startActivity(new Intent(this, barra_navegacion.class));
+        startActivity(new Intent(this, barra_navegacion_activity.class));
     }
 
 }

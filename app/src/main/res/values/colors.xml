@@ -11,5 +11,6 @@
     <color name="green">#044A42</color>
     <color name="green_light">#3A9188</color>
     <color name="green_background">#BCEAC4</color>
+    <color name="green_buttons">#E6E6E6</color>
 
 </resources>
