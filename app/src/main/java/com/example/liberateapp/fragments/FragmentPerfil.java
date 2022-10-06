@@ -73,13 +73,10 @@ public class FragmentPerfil extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
         Button logoutBtn = (Button) view.findViewById(R.id.logout_btn);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                auth.signOut();
-                startActivity(new Intent(getActivity(), MainActivity.class));
+        logoutBtn.setOnClickListener(view1 -> {
+            auth.signOut();
+            startActivity(new Intent(getActivity(), MainActivity.class));
 
-            }
         });
         return view;
     }

@@ -18,19 +18,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         inicioSesion = (Button) findViewById(R.id.buttonIrIniciarSesion);
-        inicioSesion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(com.example.liberateapp.MainActivity.this, inicio_sesion_activity.class));
-            }
-        });
+        inicioSesion.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, inicio_sesion_activity.class)));
         registro = (Button) findViewById(R.id.buttonIrRegristrar);
-        registro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, registrar_usuario_activity.class));
-            }
-        });
+        registro.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, registrar_usuario_activity.class)));
     }
 
 

@@ -124,6 +124,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
                 }
             }
         });
+        //startActivity(new Intent(this, subir_archivo_test.class));
         startActivity(new Intent(this, barra_navegacion_activity.class));
     }
 

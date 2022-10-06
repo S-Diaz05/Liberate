@@ -3,6 +3,7 @@ package com.example.liberateapp.modelo;
 public class Archivo {
     public String nombre;
     public String url;
+    public String tipo; //Informes, Boletines, Revistas, Capacitaciones
 
     public String getNombre() {
         return nombre;
@@ -20,9 +21,10 @@ public class Archivo {
         this.url = url;
     }
 
-    public Archivo(String nombre, String url) {
+    public Archivo(String nombre, String url, String tipo) {
         this.nombre = nombre;
         this.url = url;
+        this.tipo = tipo;
     }
 
 

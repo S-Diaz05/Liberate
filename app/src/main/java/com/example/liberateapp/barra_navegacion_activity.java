@@ -29,21 +29,18 @@ public class barra_navegacion_activity extends AppCompatActivity {
 
     }
     private final BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()){
-                        case R.id.fragmentPerfil:
-                            loadFragment(fragmentPerfil);
-                            return true;
-                        case R.id.fragmentHome:
-                            loadFragment(fragmentHome);
-                            return true;
+            item -> {
+                switch (item.getItemId()){
+                    case R.id.fragmentPerfil:
+                        loadFragment(fragmentPerfil);
+                        return true;
+                    case R.id.fragmentHome:
+                        loadFragment(fragmentHome);
+                        return true;
 
-                    }
-
-                    return false;
                 }
+
+                return false;
             };
 
     public void loadFragment(Fragment fragment){

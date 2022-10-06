@@ -1,21 +1,17 @@
 package com.example.liberateapp;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.liberateapp.modelo.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -53,15 +49,12 @@ public class registrar_usuario_activity extends AppCompatActivity {
 
 
         registrar = (Button) findViewById(R.id.buttonRegistro);
-        registrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(registro()){
-                    Toast.makeText(registrar_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(registrar_usuario_activity.this, MainActivity.class));
-                }else{
-                    Toast.makeText(registrar_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
-                }
+        registrar.setOnClickListener(view -> {
+            if(registro()){
+                Toast.makeText(registrar_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(registrar_usuario_activity.this, MainActivity.class));
+            }else{
+                Toast.makeText(registrar_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -86,26 +79,23 @@ public class registrar_usuario_activity extends AppCompatActivity {
             return false;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre);
-                    try{
-                        databaseReference.child("Users").child(u.getUuid()).setValue(u);
-                        Toast.makeText(registrar_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                    catch (Exception e){
-                        Toast.makeText(registrar_usuario_activity.this, "Error: "+e.toString(), Toast.LENGTH_LONG).show();
-                    }
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre);
+                try{
+                    databaseReference.child("Users").child(u.getUuid()).setValue(u);
+                    Toast.makeText(registrar_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();
                     finish();
-                }else{
-                    Toast.makeText(registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
                 }
-
-
+                catch (Exception e){
+                    Toast.makeText(registrar_usuario_activity.this, "Error: "+e, Toast.LENGTH_LONG).show();
+                }
+                finish();
+            }else{
+                Toast.makeText(registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
             }
+
+
         });
 
         return true;

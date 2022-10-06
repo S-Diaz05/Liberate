@@ -69,12 +69,9 @@ public class FragmentHome extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         FloatingActionButton btnUpload = (FloatingActionButton) view.findViewById(R.id.buttonUpload);
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentUpload fragmentUpload = new FragmentUpload();
-                loadFragment(fragmentUpload);
-            }
+        btnUpload.setOnClickListener(view1 -> {
+            FragmentUpload fragmentUpload = new FragmentUpload();
+            loadFragment(fragmentUpload);
         });
         return view;
     }
