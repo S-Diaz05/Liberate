@@ -34,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +53,8 @@ public class FragmentUpload extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String nombre;
+    private String tipo;
 
     public FragmentUpload() {
         // Required empty public constructor
@@ -90,7 +94,6 @@ public class FragmentUpload extends Fragment {
         View view =inflater.inflate(R.layout.fragment_upload, container, false);
 
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
-        Button uploadBtn = (Button) view.findViewById(R.id.buttonUploadFile);
         Spinner spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
         ArrayList<String> fileTypes = new ArrayList<>();
 
@@ -105,23 +108,23 @@ public class FragmentUpload extends Fragment {
 
         EditText editText = (EditText) view.findViewById(R.id.editText_nombreArchivo);
         selectBtn.setOnClickListener(view1 -> {
-            if(!editText.getText().toString().equals("") || spinnerFileType.getSelectedItem().toString().equals("")){
+
+            Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(doc|csv|pdf|jpg|jpeg|docx|pptx|ppt|gif))$)");
+            Matcher matcher = pattern.matcher(editText.getText().toString());
+
+            if(!matcher.find() && editText.getText().toString() != ""){
+                editText.setError("Falta agregar extensión del archivo");
+            }else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")){
+                nombre = editText.getText().toString();
+                tipo = spinnerFileType.getSelectedItem().toString();
                 selectFile();
-            }else{
+            }else if(!matcher.find()){
+                editText.setError("Extensión no válida");
+            }
+            else{
                 Toast.makeText(getContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
             }
 
-        });
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*if (uri != null){
-                   // uploadFile(uri, firebaseStorage, firebaseDatabase);
-                }else{
-                    Toast.makeText(getContext(), "Seleccione un archivo", Toast.LENGTH_SHORT).show();
-                }*/
-
-            }
         });
 
 
@@ -142,15 +145,13 @@ public class FragmentUpload extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode ==1 && resultCode==RESULT_OK && data != null&& data.getData() != null){
            uploadFile(data.getData());
-            TextView notificacion = (TextView) getView().findViewById(R.id.textViewSelectedFile);
-            notificacion.setText(data.getData().getPath().substring(data.getData().getPath().lastIndexOf("/")+1));
         }else {
             Toast.makeText(getContext(), "Seleccione un archivo", Toast.LENGTH_SHORT).show();
         }
     }
     public void uploadFile(Uri uri){
 
-
+        Toast.makeText(getContext(), nombre, Toast.LENGTH_SHORT).show();
         StorageReference storageReference;
         DatabaseReference firebaseDatabase;
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -161,32 +162,22 @@ public class FragmentUpload extends Fragment {
         progressDialog.setTitle("Cargando archivo...");
         progressDialog.setProgress(0);
         progressDialog.show();
-        StorageReference reference = storageReference.child("Archivos/"+System.currentTimeMillis()+".pdf");
+        StorageReference reference = storageReference.child("Archivos/"+nombre);
 
         reference.putFile(uri).
                 addOnSuccessListener(taskSnapshot -> {
-                    Toast.makeText(getContext(), uri.getPath(), Toast.LENGTH_SHORT).show();
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isComplete());
                     Uri url = uriTask.getResult();
-                    EditText nombre = (EditText) getView().findViewById(R.id.editText_nombreArchivo);
-                    Spinner spinnerFileType = (Spinner) getView().findViewById(R.id.spinnerFilesType);
-                    ArrayList<String> fileTypes = new ArrayList<>();
-
-                    fileTypes.add("");
-                    fileTypes.add("Informes");
-                    fileTypes.add("Boletines");
-                    fileTypes.add("Revistas");
-                    fileTypes.add("Capacitaciones");
-
-                    ArrayAdapter<String >adapter = new ArrayAdapter<>(this.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, fileTypes);
-                    spinnerFileType.setAdapter(adapter);
 
 
-                    Archivo archivo = new Archivo(nombre.getText().toString(), url.toString(), spinnerFileType.getSelectedItem().toString());
+                    Archivo archivo = new Archivo(nombre, url.toString(), tipo);
 
-                    firebaseDatabase.child(firebaseDatabase.push().getKey()).setValue(archivo);
+                    firebaseDatabase.child(archivo.getTipo()).child(firebaseDatabase.push().getKey()).setValue(archivo);
                     Toast.makeText(getContext(), "Archivo cargado exitosamente", Toast.LENGTH_SHORT).show();
+
+                    TextView notificacion = (TextView) getView().findViewById(R.id.textViewSelectedFile);
+                    notificacion.setText(nombre);
 
                 }).addOnFailureListener(e -> Toast.makeText(getContext(), "Archivo no se puedo cargar", Toast.LENGTH_SHORT).show()).
                 addOnProgressListener(snapshot -> {

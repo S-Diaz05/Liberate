@@ -81,7 +81,7 @@ public class registrar_usuario_activity extends AppCompatActivity {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre);
+                Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre, "no");
                 try{
                     databaseReference.child("Users").child(u.getUuid()).setValue(u);
                     Toast.makeText(registrar_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();

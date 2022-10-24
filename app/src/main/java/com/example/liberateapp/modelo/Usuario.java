@@ -1,6 +1,9 @@
 package com.example.liberateapp.modelo;
 
+import javax.xml.transform.sax.SAXResult;
+
 public class Usuario {
+    public String getAdmin(){return  admin;}
     public String getUuid() {
         return uuid;
     }
@@ -25,13 +28,7 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public Usuario(String uuid, String email, String nombre) {
-        this.uuid = uuid;
-        this.email = email;
-        this.nombre = nombre;
-        this.admin = false;
-    }
-    public Usuario(String uuid, String email, String nombre, boolean admin) {
+    public Usuario(String uuid, String email, String nombre, String admin) {
         this.uuid = uuid;
         this.email = email;
         this.nombre = nombre;
@@ -41,6 +38,6 @@ public class Usuario {
     private String uuid;
     private String email;
     private String nombre;
-    private boolean admin;
+    private String admin;
 
 }

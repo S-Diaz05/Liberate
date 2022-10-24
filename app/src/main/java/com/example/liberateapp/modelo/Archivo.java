@@ -21,6 +21,7 @@ public class Archivo {
         this.url = url;
     }
 
+    public String getTipo(){return tipo;}
     public Archivo(String nombre, String url, String tipo) {
         this.nombre = nombre;
         this.url = url;
