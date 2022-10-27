@@ -1,6 +1,8 @@
 package com.example.liberateapp.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
@@ -13,6 +15,7 @@ import android.os.health.ServiceHealthStats;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.liberateapp.R;
@@ -48,6 +51,11 @@ public class FragmentHome extends Fragment {
     private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String TEXT = "tipo";
+    private static final String MAIL = "correo";
+
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -85,6 +93,10 @@ public class FragmentHome extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         FloatingActionButton btnUpload = (FloatingActionButton) view.findViewById(R.id.buttonUpload);
+        Button btnRevistas = (Button) view.findViewById(R.id.buttonRevistas);
+        Button btnInformes = (Button) view.findViewById(R.id.buttonInformes);
+        Button btnCapacitaciones = (Button) view.findViewById(R.id.buttonCapacitaciones);
+        Button btnBoletines = (Button) view.findViewById(R.id.buttonBoletines);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -95,6 +107,7 @@ public class FragmentHome extends Fragment {
                 if(snapshot.exists()){
                     for(DataSnapshot ds: snapshot.getChildren()){
                         if(ds.child("email").getValue().toString().equals(user.getEmail())){
+                            setSharedPrefs(MAIL, user.getEmail());
                             if(ds.child("admin").getValue().toString().equals("si")){
                                 btnUpload.setVisibility(View.VISIBLE);
                             }
@@ -109,13 +122,29 @@ public class FragmentHome extends Fragment {
             }
         });
 
-
-
-
-
         btnUpload.setOnClickListener(view1 -> {
             FragmentUpload fragmentUpload = new FragmentUpload();
             loadFragment(fragmentUpload);
+        });
+        btnRevistas.setOnClickListener(view1 -> {
+            setSharedPrefs(TEXT,"Revistas");
+            FragmentRevistas fragmentRevistas = new FragmentRevistas();
+            loadFragment(fragmentRevistas);
+        });
+        btnBoletines.setOnClickListener(view1 -> {
+            setSharedPrefs(TEXT, "Boletines");
+            FragmentBoletines fragmentBoletines = new FragmentBoletines();
+            loadFragment(fragmentBoletines);
+        });
+        btnCapacitaciones.setOnClickListener(view1 -> {
+            setSharedPrefs(TEXT, "Capacitaciones");
+            FragmentCapacitaciones fragmentCapacitaciones = new FragmentCapacitaciones();
+            loadFragment(fragmentCapacitaciones);
+        });
+        btnInformes.setOnClickListener(view1 -> {
+            setSharedPrefs(TEXT, "Informes");
+            FragmentInformes fragmentInformes = new FragmentInformes();
+            loadFragment(fragmentInformes);
         });
         return view;
     }
@@ -124,6 +153,12 @@ public class FragmentHome extends Fragment {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commit();
+    }
+    public void setSharedPrefs(String tipo_dato, String data){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(tipo_dato, data);
+        editor.apply();
     }
 
 }

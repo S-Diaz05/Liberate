@@ -27,6 +27,10 @@ public class Archivo {
         this.url = url;
         this.tipo = tipo;
     }
+    public Archivo(String nombre, String tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
 
 
 

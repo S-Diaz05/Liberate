@@ -5,29 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#BCEAC4"
-    tools:context=".fragments.FragmentPerfil">
+    tools:context=".fragments.FragmentInformes">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/logout_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="152dp"
-            android:backgroundTint="#E6E6E6"
-            android:text="@string/log_out"
-            android:textColor="#000000"
-            android:textColorLink="#F0F3FA"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="159dp"
@@ -40,6 +23,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.892"
             app:srcCompat="@drawable/logoweb" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

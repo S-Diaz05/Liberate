@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class inicio_sesion_activity extends AppCompatActivity {
 
     Button logIn;
@@ -46,12 +48,7 @@ public class inicio_sesion_activity extends AppCompatActivity {
         logIn = (Button) findViewById(R.id.login_btn);
 
 
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userLogin();
-            }
-        });
+        logIn.setOnClickListener(view -> userLogin());
     }
     @Override
     public void onStart() {
@@ -89,39 +86,37 @@ public class inicio_sesion_activity extends AppCompatActivity {
             editPassword.setError("La contraseña es de mínimo 6 caracteres");
             editPassword.requestFocus();
         }
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
 
-                    //verificar correo
-                    FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
-                    reference = FirebaseDatabase.getInstance().getReference("Usuarios");
-                    idUsuario = usuario.getUid();
+                //verificar correo
+                FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+                reference = FirebaseDatabase.getInstance().getReference("Usuarios");
+                assert usuario != null;
+                idUsuario = usuario.getUid();
 
-                    reference.child(idUsuario).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Usuario perfilUsuario = snapshot.getValue(Usuario.class);
+                reference.child(idUsuario).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Usuario perfilUsuario = snapshot.getValue(Usuario.class);
 
 
-                            FirebaseDatabase.getInstance().getReference("Usuarios")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(perfilUsuario);
+                        FirebaseDatabase.getInstance().getReference("Usuarios")
+                                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                                .setValue(perfilUsuario);
 
-                        }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(inicio_sesion_activity.this, "Error en el inicio ", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(inicio_sesion_activity.this, "Error en el inicio ", Toast.LENGTH_LONG).show();
+                    }
+                });
 
-                }
-                else{
-                    Toast.makeText(inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
 
-                }
             }
         });
         //startActivity(new Intent(this, subir_archivo_test.class));

@@ -2,13 +2,20 @@ package com.example.liberateapp.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PackageManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -49,12 +56,10 @@ public class FragmentUpload extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private String nombre;
     private String tipo;
+
+    private final int STORAGE_PERMISSION_CODE = 1;
 
     public FragmentUpload() {
         // Required empty public constructor
@@ -82,8 +87,9 @@ public class FragmentUpload extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -96,7 +102,7 @@ public class FragmentUpload extends Fragment {
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
         Spinner spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
         ArrayList<String> fileTypes = new ArrayList<>();
-
+        permisos();
         fileTypes.add("");
         fileTypes.add("Informes");
         fileTypes.add("Boletines");
@@ -109,21 +115,22 @@ public class FragmentUpload extends Fragment {
         EditText editText = (EditText) view.findViewById(R.id.editText_nombreArchivo);
         selectBtn.setOnClickListener(view1 -> {
 
-            Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(doc|csv|pdf|jpg|jpeg|docx|pptx|ppt|gif))$)");
-            Matcher matcher = pattern.matcher(editText.getText().toString());
 
-            if(!matcher.find() && editText.getText().toString() != ""){
-                editText.setError("Falta agregar extensión del archivo");
-            }else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")){
-                nombre = editText.getText().toString();
-                tipo = spinnerFileType.getSelectedItem().toString();
-                selectFile();
-            }else if(!matcher.find()){
-                editText.setError("Extensión no válida");
-            }
-            else{
-                Toast.makeText(getContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
-            }
+                Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(doc|csv|pdf|jpg|jpeg|docx|pptx|ppt|gif))$)");
+                Matcher matcher = pattern.matcher(editText.getText().toString());
+
+                if(!matcher.find() && !editText.getText().toString().equals("")){
+                    editText.setError("Falta agregar extensión del archivo o no es válido");
+                }else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")){
+                    nombre = editText.getText().toString();
+                    tipo = spinnerFileType.getSelectedItem().toString();
+                    selectFile();
+                }else if(!matcher.find()){
+                    editText.setError("Extensión no válida");
+                }
+                else{
+                    Toast.makeText(getContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                }
 
         });
 
@@ -131,14 +138,41 @@ public class FragmentUpload extends Fragment {
         return view;
     }
 
-
+    public boolean permisos(){
+        if(ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+        if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(getContext()).setTitle("Permisos necesarios").
+                    setMessage("El permiso es necesario para continuar con la acción").
+                    setPositiveButton("ok", (dialogInterface, i) -> ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            STORAGE_PERMISSION_CODE)).setNegativeButton("Cancelado", (dialogInterface, i) -> dialogInterface.dismiss()).create().show();
+        }else{
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    STORAGE_PERMISSION_CODE);
+        }
+        return true;
+    }
     public Intent selectFile(){
         Intent i = new Intent();
-        i.setType("application/pdf");
+        i.setType(tipo);
         i.setAction(Intent.ACTION_GET_CONTENT);
+        Toast.makeText(getContext(), "Llego aqui", Toast.LENGTH_SHORT).show();
         startActivityForResult(Intent.createChooser(i, "Seleccione un archivo") , 1);
         return i;
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(getContext(), "Permiso dado", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getContext(), "Permiso denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -166,6 +200,7 @@ public class FragmentUpload extends Fragment {
 
         reference.putFile(uri).
                 addOnSuccessListener(taskSnapshot -> {
+                    progressDialog.dismiss();
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isComplete());
                     Uri url = uriTask.getResult();
