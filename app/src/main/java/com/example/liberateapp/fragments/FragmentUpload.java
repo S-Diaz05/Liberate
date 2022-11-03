@@ -58,6 +58,10 @@ public class FragmentUpload extends Fragment {
 
     private String nombre;
     private String tipo;
+    private String extension;
+
+    Spinner spinnerFileType;
+    Spinner spinnerExtension;
 
     private final int STORAGE_PERMISSION_CODE = 1;
 
@@ -100,44 +104,60 @@ public class FragmentUpload extends Fragment {
         View view =inflater.inflate(R.layout.fragment_upload, container, false);
 
         Button selectBtn = (Button) view.findViewById(R.id.buttonSelect);
-        Spinner spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
-        ArrayList<String> fileTypes = new ArrayList<>();
-        permisos();
-        fileTypes.add("");
-        fileTypes.add("Informes");
-        fileTypes.add("Boletines");
-        fileTypes.add("Revistas");
-        fileTypes.add("Capacitaciones");
-
-        ArrayAdapter<String >adapter = new ArrayAdapter<>(this.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, fileTypes);
-        spinnerFileType.setAdapter(adapter);
+        spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
+        spinnerExtension = (Spinner) view.findViewById(R.id.spinnerExtension);
+        spinners();
+        //  permisos();
 
         EditText editText = (EditText) view.findViewById(R.id.editText_nombreArchivo);
         selectBtn.setOnClickListener(view1 -> {
 
-
-                Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(doc|csv|pdf|jpg|jpeg|docx|pptx|ppt|gif))$)");
-                Matcher matcher = pattern.matcher(editText.getText().toString());
-
-                if(!matcher.find() && !editText.getText().toString().equals("")){
-                    editText.setError("Falta agregar extensión del archivo o no es válido");
-                }else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")){
-                    nombre = editText.getText().toString();
-                    tipo = spinnerFileType.getSelectedItem().toString();
-                    selectFile();
-                }else if(!matcher.find()){
-                    editText.setError("Extensión no válida");
-                }
-                else{
-                    Toast.makeText(getContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
-                }
+            if(!validar(editText.getText().toString())){
+                editText.setError("Nombre no válido");
+            }
+            else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")
+                && !spinnerExtension.getSelectedItem().toString().equals("")){
+                nombre = editText.getText().toString();
+                tipo = spinnerFileType.getSelectedItem().toString();
+                extension = spinnerExtension.getSelectedItem().toString();
+                nombre = nombre+"."+extension;
+                selectFile();
+            }
+            else{
+                Toast.makeText(getContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
+            }
 
         });
-
-
         return view;
     }
+    public void spinners(){
+        ArrayList<String> fileTypes = new ArrayList<>();
+        ArrayList<String> fileExtension = new ArrayList<>();
 
+        fileTypes.add("");
+        fileTypes.add("Boletines");
+        fileTypes.add("Capacitaciones");
+        fileTypes.add("Informes");
+        fileTypes.add("Revistas");
+
+        fileExtension.add("");
+        fileExtension.add("csv");
+        fileExtension.add("docx");
+        fileExtension.add("gif");
+        fileExtension.add("jpg");
+        fileExtension.add("jpeg");
+        fileExtension.add("pdf");
+        fileExtension.add("pptx");
+        fileExtension.add("png");
+        fileExtension.add("xlsx");
+
+        ArrayAdapter<String >adapter = new ArrayAdapter<>(this.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, fileTypes);
+        spinnerFileType.setAdapter(adapter);
+
+        ArrayAdapter<String >adapter2 = new ArrayAdapter<>(this.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, fileExtension);
+        spinnerExtension.setAdapter(adapter2);
+    }
+/*
     public boolean permisos(){
         if(ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
@@ -153,17 +173,20 @@ public class FragmentUpload extends Fragment {
                     STORAGE_PERMISSION_CODE);
         }
         return true;
+    }*/
+    public boolean validar(String nombreArchivo){
+        return nombreArchivo.matches("[a-z A-Z 0-9]+");
     }
     public Intent selectFile(){
         Intent i = new Intent();
-        i.setType(tipo);
+        i.setType("application/"+extension); //Tipo de archivo
         i.setAction(Intent.ACTION_GET_CONTENT);
-        Toast.makeText(getContext(), "Llego aqui", Toast.LENGTH_SHORT).show();
         startActivityForResult(Intent.createChooser(i, "Seleccione un archivo") , 1);
+
         return i;
 
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == STORAGE_PERMISSION_CODE){
@@ -173,19 +196,17 @@ public class FragmentUpload extends Fragment {
                 Toast.makeText(getContext(), "Permiso denegado", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode ==1 && resultCode==RESULT_OK && data != null&& data.getData() != null){
            uploadFile(data.getData());
         }else {
-            Toast.makeText(getContext(), "Seleccione un archivo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No se pudo seleccionar un archivo", Toast.LENGTH_SHORT).show();
         }
     }
     public void uploadFile(Uri uri){
-
-        Toast.makeText(getContext(), nombre, Toast.LENGTH_SHORT).show();
         StorageReference storageReference;
         DatabaseReference firebaseDatabase;
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -204,9 +225,7 @@ public class FragmentUpload extends Fragment {
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isComplete());
                     Uri url = uriTask.getResult();
-
-
-                    Archivo archivo = new Archivo(nombre, url.toString(), tipo);
+                    Archivo archivo = new Archivo(nombre, url.toString(), tipo, extension);
 
                     firebaseDatabase.child(archivo.getTipo()).child(firebaseDatabase.push().getKey()).setValue(archivo);
                     Toast.makeText(getContext(), "Archivo cargado exitosamente", Toast.LENGTH_SHORT).show();

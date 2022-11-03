@@ -4,6 +4,7 @@ public class Archivo {
     public String nombre;
     public String url;
     public String tipo; //Informes, Boletines, Revistas, Capacitaciones
+    public String extension;
 
     public String getNombre() {
         return nombre;
@@ -22,10 +23,11 @@ public class Archivo {
     }
 
     public String getTipo(){return tipo;}
-    public Archivo(String nombre, String url, String tipo) {
+    public Archivo(String nombre, String url, String tipo, String extension) {
         this.nombre = nombre;
         this.url = url;
         this.tipo = tipo;
+        this.extension = extension;
     }
     public Archivo(String nombre, String tipo) {
         this.nombre = nombre;

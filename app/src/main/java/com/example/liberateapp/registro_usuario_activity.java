@@ -21,11 +21,11 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class registrar_usuario_activity extends AppCompatActivity {
+public class registro_usuario_activity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText editNombre, editPassword, editCorreo, editConfirmarPassword;
-    Button registrar;
+    Button registroBtn;
 
     DatabaseReference mDatabase;
     FirebaseDatabase firebaseDatabase;
@@ -48,13 +48,13 @@ public class registrar_usuario_activity extends AppCompatActivity {
 
 
 
-        registrar = (Button) findViewById(R.id.buttonRegistro);
-        registrar.setOnClickListener(view -> {
+        registroBtn = (Button) findViewById(R.id.buttonRegistro);
+        registroBtn.setOnClickListener(view -> {
             if(registro()){
-                Toast.makeText(registrar_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(registrar_usuario_activity.this, MainActivity.class));
+                Toast.makeText(registro_usuario_activity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(registro_usuario_activity.this, MainActivity.class));
             }else{
-                Toast.makeText(registrar_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
+                Toast.makeText(registro_usuario_activity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -84,15 +84,15 @@ public class registrar_usuario_activity extends AppCompatActivity {
                 Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre, "no");
                 try{
                     databaseReference.child("Users").child(u.getUuid()).setValue(u);
-                    Toast.makeText(registrar_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();
+                    Toast.makeText(registro_usuario_activity.this, "Se registro correctamente", Toast.LENGTH_LONG).show();
                     finish();
                 }
                 catch (Exception e){
-                    Toast.makeText(registrar_usuario_activity.this, "Error: "+e, Toast.LENGTH_LONG).show();
+                    Toast.makeText(registro_usuario_activity.this, "Error: "+e, Toast.LENGTH_LONG).show();
                 }
                 finish();
             }else{
-                Toast.makeText(registrar_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
+                Toast.makeText(registro_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
             }
 
 

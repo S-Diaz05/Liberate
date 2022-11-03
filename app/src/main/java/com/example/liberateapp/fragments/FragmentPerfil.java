@@ -3,17 +3,22 @@ package com.example.liberateapp.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
+import android.widget.TextView;
 import com.example.liberateapp.MainActivity;
 import com.example.liberateapp.R;
-import com.example.liberateapp.registrar_usuario_activity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +28,10 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FragmentPerfil extends Fragment {
 
     FirebaseAuth auth;
+    DatabaseReference databaseReference;
+
+    TextView nombrePersona;
+    TextView emailPersona;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,6 +81,9 @@ public class FragmentPerfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        nombrePersona = (TextView) view.findViewById(R.id.textViewNombre);
+        emailPersona = (TextView) view.findViewById(R.id.textViewEmail);
+        llenar();
         Button logoutBtn = (Button) view.findViewById(R.id.logout_btn);
         logoutBtn.setOnClickListener(view1 -> {
             auth.signOut();
@@ -79,5 +91,27 @@ public class FragmentPerfil extends Fragment {
 
         });
         return view;
+    }
+    public void llenar(){
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                   for(DataSnapshot ds: snapshot.getChildren()){
+                        if(ds.child("email").getValue().toString().equals(auth.getCurrentUser().getEmail()) ){
+                            nombrePersona.setText(ds.child("nombre").getValue().toString());
+                            emailPersona.setText(ds.child("email").getValue().toString());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

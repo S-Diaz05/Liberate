@@ -85,9 +85,9 @@ public class FragmentInformes extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_boletines, container, false);
+        View view =  inflater.inflate(R.layout.fragment_informes, container, false);
 
-        mRecycler = (RecyclerView) view.findViewById(R.id.recyclerViewBoletines);
+        mRecycler = (RecyclerView) view.findViewById(R.id.recyclerViewInformes);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         database = FirebaseDatabase.getInstance();
@@ -112,7 +112,8 @@ public class FragmentInformes extends Fragment {
 
                         String nombre = ds.child("nombre").getValue().toString();
                         String url = ds.child("url").getValue().toString();
-                        archivosList.add(new Archivo(nombre, url,"Boletines"));
+                        String extension = ds.child("extension").getValue().toString();
+                        archivosList.add(new Archivo(nombre, url,"Informes", extension));
 
                     }
                     adapter = new AdaptadorArchivos(archivosList, R.layout.view_archivos);

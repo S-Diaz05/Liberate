@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#BCEAC4"
-    tools:context=".registrar_usuario_activity">
+    tools:context=".registro_usuario_activity">
 
     <TextView
         android:id="@+id/textView"

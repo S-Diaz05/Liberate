@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         inicioSesion = (Button) findViewById(R.id.buttonIrIniciarSesion);
         inicioSesion.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, inicio_sesion_activity.class)));
         registro = (Button) findViewById(R.id.buttonIrRegristrar);
-        registro.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, registrar_usuario_activity.class)));
+        registro.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, registro_usuario_activity.class)));
     }
 
 

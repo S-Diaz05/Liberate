@@ -89,9 +89,9 @@ public class FragmentCapacitaciones extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_boletines, container, false);
+        View view =  inflater.inflate(R.layout.fragment_capacitaciones, container, false);
 
-        mRecycler = (RecyclerView) view.findViewById(R.id.recyclerViewBoletines);
+        mRecycler = (RecyclerView) view.findViewById(R.id.recyclerViewCapacitaciones);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         database = FirebaseDatabase.getInstance();
@@ -116,7 +116,8 @@ public class FragmentCapacitaciones extends Fragment {
 
                         String nombre = ds.child("nombre").getValue().toString();
                         String url = ds.child("url").getValue().toString();
-                        archivosList.add(new Archivo(nombre, url,"Boletines"));
+                        String extension = ds.child("extension").getValue().toString();
+                        archivosList.add(new Archivo(nombre, url,"Capacitaciones", extension));
 
                     }
                     adapter = new AdaptadorArchivos(archivosList, R.layout.view_archivos);

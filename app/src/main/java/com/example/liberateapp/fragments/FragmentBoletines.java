@@ -108,7 +108,8 @@ public class FragmentBoletines extends Fragment {
 
                         String nombre = ds.child("nombre").getValue().toString();
                         String url = ds.child("url").getValue().toString();
-                        archivosList.add(new Archivo(nombre, url,"Boletines"));
+                        String extension = ds.child("extension").getValue().toString();
+                        archivosList.add(new Archivo(nombre, url,"Boletines", extension));
 
                     }
                     adapter = new AdaptadorArchivos(archivosList, R.layout.view_archivos);

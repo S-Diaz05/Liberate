@@ -22,7 +22,7 @@
             android:name=".barra_navegacion_activity"
             android:exported="true" />
         <activity
-            android:name=".registrar_usuario_activity"
+            android:name=".registro_usuario_activity"
             android:exported="false" />
         <activity
             android:name=".inicio_sesion_activity"
