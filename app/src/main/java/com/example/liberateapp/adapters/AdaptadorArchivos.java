@@ -30,6 +30,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
+/**
+ * Lista archivos según el tipo y agregar botón de descarga y en el caso de ser administrador
+ * botón de eliminar
+ */
 public class AdaptadorArchivos extends RecyclerView.Adapter<AdaptadorArchivos.ViewHolder> {
     private final int resource;
     private final ArrayList<Archivo> archivoList;
@@ -127,11 +131,24 @@ public class AdaptadorArchivos extends RecyclerView.Adapter<AdaptadorArchivos.Vi
         });
         holder.btn_download.setOnClickListener(view -> download(archivo, view));
     }
+
+    /**
+     * Confirmar eliminar archivo
+     * TODO
+     * @return
+     */
+    //TODO
     public boolean confirmDelete(){
 
 
         return true;
     }
+
+    /**
+     * Descarga archivo
+     * @param archivo
+     * @param view
+     */
     public void download(Archivo archivo, View view){
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -139,6 +156,14 @@ public class AdaptadorArchivos extends RecyclerView.Adapter<AdaptadorArchivos.Vi
         reference.getDownloadUrl().addOnSuccessListener(uri -> downloadFiles(view.getContext(), archivo.getNombre(),DIRECTORY_DOWNLOADS, uri.toString() )).
                 addOnFailureListener(e -> {       });
     }
+
+    /**
+     * Descarga archivos
+     * @param context
+     * @param fileName
+     * @param destinationDirectory
+     * @param url
+     */
     public void downloadFiles(Context context, String fileName, String destinationDirectory, String url){
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(url);

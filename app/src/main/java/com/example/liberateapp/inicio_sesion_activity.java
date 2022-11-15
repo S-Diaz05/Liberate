@@ -6,15 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.liberateapp.modelo.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+/**
+ * Inicio de sesión
+ */
 public class inicio_sesion_activity extends AppCompatActivity {
 
     Button logIn;
@@ -33,7 +32,6 @@ public class inicio_sesion_activity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
     private String idUsuario;
-    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +51,11 @@ public class inicio_sesion_activity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-          /*  Intent i = new Intent(inicio_sesion_activity.this, MainActivity2.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);*/
-        }else{
-
-        }
     }
+
+    /**
+     * Se verfica que los campos esten llenados con información correcta
+     */
     public void userLogin(){
         String email = editCorreo.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
@@ -85,11 +78,21 @@ public class inicio_sesion_activity extends AppCompatActivity {
         if(password.length()<6){
             editPassword.setError("La contraseña es de mínimo 6 caracteres");
             editPassword.requestFocus();
+            return;
         }
+        verficarUsuario(email, password);
+
+    }
+
+    /**
+     * Verificar que las credenciales sean válidas y de ser asi, iniciar sesión
+     * @param email
+     * @param password
+     */
+    public void verficarUsuario(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
 
-                //verificar correo
                 FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
                 reference = FirebaseDatabase.getInstance().getReference("Usuarios");
                 assert usuario != null;
@@ -105,6 +108,8 @@ public class inicio_sesion_activity extends AppCompatActivity {
                                 .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
                                 .setValue(perfilUsuario);
 
+                        startActivity(new Intent(getBaseContext(), barra_navegacion_activity.class));
+
                     }
 
                     @Override
@@ -115,12 +120,11 @@ public class inicio_sesion_activity extends AppCompatActivity {
 
             }
             else{
-                Toast.makeText(inicio_sesion_activity.this, "Error en el login a la app, revisa tus credenciales", Toast.LENGTH_LONG).show();
+                Toast.makeText(inicio_sesion_activity.this, "Error en el inicio de sesión, revisa tus credenciales", Toast.LENGTH_LONG).show();
 
             }
         });
-        //startActivity(new Intent(this, subir_archivo_test.class));
-        startActivity(new Intent(this, barra_navegacion_activity.class));
+
     }
 
 }

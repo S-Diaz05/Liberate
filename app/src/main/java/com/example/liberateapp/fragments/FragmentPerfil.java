@@ -21,9 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentPerfil#newInstance} factory method to
- * create an instance of this fragment.
+ * Muestra la información del perfil y permite cerrar sesión
  */
 public class FragmentPerfil extends Fragment {
 
@@ -46,14 +44,6 @@ public class FragmentPerfil extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentPerfil.
-     */
     // TODO: Rename and change types and number of parameters
     public static FragmentPerfil newInstance(String param1, String param2) {
         FragmentPerfil fragment = new FragmentPerfil();
@@ -84,6 +74,9 @@ public class FragmentPerfil extends Fragment {
         nombrePersona = (TextView) view.findViewById(R.id.textViewNombre);
         emailPersona = (TextView) view.findViewById(R.id.textViewEmail);
         llenar();
+        /**
+         * Cerrar sesión
+         */
         Button logoutBtn = (Button) view.findViewById(R.id.logout_btn);
         logoutBtn.setOnClickListener(view1 -> {
             auth.signOut();
@@ -92,6 +85,10 @@ public class FragmentPerfil extends Fragment {
         });
         return view;
     }
+
+    /**
+     * Llenar información del usuario actual
+     */
     public void llenar(){
 
         databaseReference = FirebaseDatabase.getInstance().getReference();

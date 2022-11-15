@@ -1,7 +1,8 @@
 package com.example.liberateapp.modelo;
 
-import javax.xml.transform.sax.SAXResult;
-
+/**
+ * Usuario
+ */
 public class Usuario {
     public String getAdmin(){return  admin;}
     public String getUuid() {
@@ -28,6 +29,13 @@ public class Usuario {
         this.nombre = nombre;
     }
 
+    /**
+     *
+     * @param uuid
+     * @param email
+     * @param nombre
+     * @param admin si o no, configurar en la nube
+     */
     public Usuario(String uuid, String email, String nombre, String admin) {
         this.uuid = uuid;
         this.email = email;

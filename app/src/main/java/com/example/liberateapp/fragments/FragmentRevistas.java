@@ -26,9 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentRevistas#newInstance} factory method to
- * create an instance of this fragment.
+ * Archivos de tipo revista
  */
 public class FragmentRevistas extends Fragment {
     FirebaseDatabase database;
@@ -55,14 +53,6 @@ public class FragmentRevistas extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentRevistas.
-     */
     // TODO: Rename and change types and number of parameters
     public static FragmentRevistas newInstance(String param1, String param2) {
         FragmentRevistas fragment = new FragmentRevistas();
@@ -94,12 +84,15 @@ public class FragmentRevistas extends Fragment {
         myRef = database.getReference();
 
         auth = FirebaseAuth.getInstance();
-
-        getUbicacionesFirebase();
+        getArchivosFirebase();
 
         return  view;
     }
-    public void getUbicacionesFirebase(){
+
+    /**
+     * Listar los archivos
+     */
+    public void getArchivosFirebase(){
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String tipo = sharedPreferences.getString(TEXT, "No existe ");
         myRef.child("Archivos").child(tipo).addValueEventListener(new ValueEventListener() {

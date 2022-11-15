@@ -26,9 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentBoletines#newInstance} factory method to
- * create an instance of this fragment.
+ * Archivos de tipo boletines
  */
 public class FragmentBoletines extends Fragment {
 
@@ -91,11 +89,14 @@ public class FragmentBoletines extends Fragment {
 
         auth = FirebaseAuth.getInstance();
 
-        getUbicacionesFirebase();
+        getArchivosFirebase();
 
         return  view;
     }
-    public void getUbicacionesFirebase(){
+    /**
+     * Listar los archivos
+     */
+    public void getArchivosFirebase(){
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String tipo = sharedPreferences.getString(TEXT, "No existe ");
         myRef.child("Archivos").child(tipo).addValueEventListener(new ValueEventListener() {

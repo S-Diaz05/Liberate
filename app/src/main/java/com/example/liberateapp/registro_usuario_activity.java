@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.example.liberateapp.modelo.Usuario;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,13 +20,15 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Registrar usuario
+ */
 public class registro_usuario_activity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText editNombre, editPassword, editCorreo, editConfirmarPassword;
     Button registroBtn;
 
-    DatabaseReference mDatabase;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
@@ -46,8 +47,6 @@ public class registro_usuario_activity extends AppCompatActivity {
         editPassword = (EditText) findViewById(R.id.editText_passwordRegistro);
         editConfirmarPassword = (EditText) findViewById(R.id.editText_passwordRegistro2);
 
-
-
         registroBtn = (Button) findViewById(R.id.buttonRegistro);
         registroBtn.setOnClickListener(view -> {
             if(registro()){
@@ -62,13 +61,12 @@ public class registro_usuario_activity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            currentUser.reload();
-        }
     }
 
+    /**
+     * Registro de usuario en la nube
+     * @return si el usuario se pudo crear
+     */
     public boolean registro(){
         String email = editCorreo.getText().toString().trim();
         String nombre = editNombre.getText().toString().trim();
@@ -78,7 +76,6 @@ public class registro_usuario_activity extends AppCompatActivity {
         if(!verficar(email, nombre, password, verificarPassword)){
             return false;
         }
-
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 Usuario u = new Usuario(UUID.randomUUID().toString(), email, nombre, "no");
@@ -94,12 +91,19 @@ public class registro_usuario_activity extends AppCompatActivity {
             }else{
                 Toast.makeText(registro_usuario_activity.this, "Error en el registro, intente de nuevo más adelante", Toast.LENGTH_LONG).show();
             }
-
-
         });
 
         return true;
     }
+
+    /**
+     * Verfica que la información permita crear la cuenta
+     * @param email
+     * @param nombre
+     * @param password
+     * @param verificarPassword
+     * @return si el usuario se puede crear despues de aceptar la información dada
+     */
     public boolean verficar(String email, String nombre, String password, String verificarPassword){
         if(nombre.isEmpty()){
             editNombre.setError("Se requiere nombre completo");

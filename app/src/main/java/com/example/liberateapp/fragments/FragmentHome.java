@@ -11,15 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.health.ServiceHealthStats;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+
 
 import com.example.liberateapp.R;
-import com.example.liberateapp.modelo.Usuario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,14 +28,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentHome#newInstance} factory method to
- * create an instance of this fragment.
+ * Lista los tipos de archivos y si el usuario es admin, aparece el botón de subir archivos
  */
 public class FragmentHome extends Fragment {
 
@@ -60,14 +54,6 @@ public class FragmentHome extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentHome.
-     */
     // TODO: Rename and change types and number of parameters
     public static FragmentHome newInstance(String param1, String param2) {
         FragmentHome fragment = new FragmentHome();
@@ -100,7 +86,7 @@ public class FragmentHome extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        //Boton de subir archivo
         databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,7 +107,7 @@ public class FragmentHome extends Fragment {
 
             }
         });
-
+        //Dirigir a listas de archivos
         btnUpload.setOnClickListener(view1 -> {
             FragmentUpload fragmentUpload = new FragmentUpload();
             loadFragment(fragmentUpload);
@@ -148,12 +134,23 @@ public class FragmentHome extends Fragment {
         });
         return view;
     }
+
+    /**
+     * Carga fragmento a dirigirse
+     * @param fragment
+     */
     public void loadFragment(Fragment fragment){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commit();
     }
+
+    /**
+     * Establece el tipo de archivo con la libreria sharedPrefs para manejar en otras pantallas
+     * @param tipo_dato
+     * @param data
+     */
     public void setSharedPrefs(String tipo_dato, String data){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -5,7 +5,6 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.PackageManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,25 +28,14 @@ import android.widget.Toast;
 
 import com.example.liberateapp.R;
 import com.example.liberateapp.modelo.Archivo;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentUpload#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentUpload extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -69,14 +56,6 @@ public class FragmentUpload extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentUpload.
-     */
     // TODO: Rename and change types and number of parameters
     public static FragmentUpload newInstance(String param1, String param2) {
         FragmentUpload fragment = new FragmentUpload();
@@ -107,7 +86,7 @@ public class FragmentUpload extends Fragment {
         spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
         spinnerExtension = (Spinner) view.findViewById(R.id.spinnerExtension);
         spinners();
-        //  permisos();
+        permisos();
 
         EditText editText = (EditText) view.findViewById(R.id.editText_nombreArchivo);
         selectBtn.setOnClickListener(view1 -> {
@@ -116,7 +95,7 @@ public class FragmentUpload extends Fragment {
                 editText.setError("Nombre no válido");
             }
             else if(!editText.getText().toString().equals("") && !spinnerFileType.getSelectedItem().toString().equals("")
-                && !spinnerExtension.getSelectedItem().toString().equals("")){
+                    && !spinnerExtension.getSelectedItem().toString().equals("")){
                 nombre = editText.getText().toString();
                 tipo = spinnerFileType.getSelectedItem().toString();
                 extension = spinnerExtension.getSelectedItem().toString();
@@ -130,6 +109,10 @@ public class FragmentUpload extends Fragment {
         });
         return view;
     }
+
+    /**
+     * Llenar spinners con la información
+     */
     public void spinners(){
         ArrayList<String> fileTypes = new ArrayList<>();
         ArrayList<String> fileExtension = new ArrayList<>();
@@ -157,7 +140,12 @@ public class FragmentUpload extends Fragment {
         ArrayAdapter<String >adapter2 = new ArrayAdapter<>(this.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, fileExtension);
         spinnerExtension.setAdapter(adapter2);
     }
-/*
+
+    /**
+     * Verficar que el usuario tenga permisos para almacenamiento
+     * de lo contrario pedir por ellos
+     * @return acepto permisos
+     */
     public boolean permisos(){
         if(ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
@@ -168,12 +156,19 @@ public class FragmentUpload extends Fragment {
                     setMessage("El permiso es necesario para continuar con la acción").
                     setPositiveButton("ok", (dialogInterface, i) -> ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                             STORAGE_PERMISSION_CODE)).setNegativeButton("Cancelado", (dialogInterface, i) -> dialogInterface.dismiss()).create().show();
+            return false;
         }else{
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     STORAGE_PERMISSION_CODE);
         }
         return true;
-    }*/
+    }
+
+    /**
+     * Validar que el nombre del archivo sea válido
+     * @param nombreArchivo
+     * @return si es válido
+     */
     public boolean validar(String nombreArchivo){
         return nombreArchivo.matches("[a-z A-Z 0-9]+");
     }
@@ -182,11 +177,10 @@ public class FragmentUpload extends Fragment {
         i.setType("application/"+extension); //Tipo de archivo
         i.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(i, "Seleccione un archivo") , 1);
-
         return i;
 
     }
-/*
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == STORAGE_PERMISSION_CODE){
@@ -196,16 +190,21 @@ public class FragmentUpload extends Fragment {
                 Toast.makeText(getContext(), "Permiso denegado", Toast.LENGTH_SHORT).show();
             }
         }
-    }*/
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode ==1 && resultCode==RESULT_OK && data != null&& data.getData() != null){
-           uploadFile(data.getData());
+            uploadFile(data.getData());
         }else {
             Toast.makeText(getContext(), "No se pudo seleccionar un archivo", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Subir archivo a la nube
+     * @param uri dirección del archivo
+     */
     public void uploadFile(Uri uri){
         StorageReference storageReference;
         DatabaseReference firebaseDatabase;

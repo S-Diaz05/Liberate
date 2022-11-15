@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+/**
+ * Pantalla de inicio, permise dirigirse a las pantallas de inicio de sesión o registro
+ */
 public class MainActivity extends AppCompatActivity {
 
     Button inicioSesion;
