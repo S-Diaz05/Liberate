@@ -5,8 +5,29 @@ package com.example.liberateapp.modelo;
  */
 public class Archivo {
     private String nombre;
+
+    public Archivo(String nombre, String url, String tipo, String extension) {
+        this.nombre = nombre;
+        this.url = url;
+        this.tipo = tipo;
+        this.extension = extension;
+    }
+
     private String url;
     private String tipo; //Informes, Boletines, Revistas, Capacitaciones
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
     private String extension;
 
     public String getNombre() {
@@ -34,10 +55,4 @@ public class Archivo {
      * @param tipo Informes, Boletines, Revistas, Capacitaciones
      * @param extension Pdf, doc, etc.
      */
-    public Archivo(String nombre, String url, String tipo, String extension) {
-        this.nombre = nombre;
-        this.url = url;
-        this.tipo = tipo;
-        this.extension = extension;
-    }
 }

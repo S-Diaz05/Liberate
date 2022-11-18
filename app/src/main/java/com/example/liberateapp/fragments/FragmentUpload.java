@@ -86,7 +86,7 @@ public class FragmentUpload extends Fragment {
         spinnerFileType = (Spinner) view.findViewById(R.id.spinnerFilesType);
         spinnerExtension = (Spinner) view.findViewById(R.id.spinnerExtension);
         spinners();
-        permisos();
+     //   permisos();
 
         EditText editText = (EditText) view.findViewById(R.id.editText_nombreArchivo);
         selectBtn.setOnClickListener(view1 -> {
